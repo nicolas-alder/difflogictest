@@ -56,7 +56,7 @@ def load_dataset(args):
         train_set = Adder()
         test_set = Adder()
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=100, shuffle=True)
-        test_loader = torch.utils.data.DataLoader(test_set, batch_size=100, shuffle=False)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=int(1e6), shuffle=False)
     elif args.dataset == 'adult':
         train_set = uci_datasets.AdultDataset('./data-uci', split='train', download=True, with_val=False)
         test_set = uci_datasets.AdultDataset('./data-uci', split='test', with_val=False)
@@ -219,6 +219,8 @@ def eval(model, loader, mode):
     orig_mode = model.training
     with torch.no_grad():
         model.train(mode=mode)
+        print(model(x.to('cuda').round()).argmax(-1))
+        print(y)
         res = np.mean(
             [
                 (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
