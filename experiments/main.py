@@ -359,6 +359,7 @@ if __name__ == '__main__':
                 results.store_results(r)
             else:
                 print(r)
+            print(r)
 
             if valid_accuracy_eval_mode > best_acc:
                 best_acc = valid_accuracy_eval_mode
