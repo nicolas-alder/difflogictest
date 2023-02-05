@@ -123,6 +123,7 @@ def load_n(loader, n):
 
 def input_dim_of_dataset(dataset):
     return {
+        'custom': 8,
         'adult': 116,
         'breast_cancer': 51,
         'monk1': 17,
