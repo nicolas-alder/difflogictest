@@ -37,7 +37,7 @@ class Adder(torch.utils.data.Dataset):
 
         to_add_bin_string_1 = format(to_add[0], '04b')
         to_add_bin_string_2 = format(to_add[1], '04b')
-        #result_bin_string = format(result, '05b')
+        result_bin_string = format(result, '05b')
 
         bin_to_add_1 = [float(to_add_bin_string_1[0]), float(to_add_bin_string_1[1]), float(to_add_bin_string_1[2]),
                         float(to_add_bin_string_1[3])]
