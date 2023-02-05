@@ -229,6 +229,10 @@ def eval(model, loader, mode):
             ]
         )
         model.train(mode=orig_mode)
+        print("Example")
+        x, y = next(iter(loader))
+        print(model(x.round()))
+        print(y)
     return res.item()
 
 
