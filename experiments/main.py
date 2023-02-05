@@ -48,6 +48,7 @@ class Adder(torch.utils.data.Dataset):
         #bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),float(result_bin_string[3]), float(result_bin_string[4])]))
         bin_result = torch.zeros(32)
         bin_result[result.item()]=1.
+        bin_result = bin_result.argmax(-1)
         return bin_to_add, bin_result
 
 def load_dataset(args):
