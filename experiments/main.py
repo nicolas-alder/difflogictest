@@ -327,7 +327,7 @@ if __name__ == '__main__':
         y = y.to('cuda')
 
         loss = train(model, x, y, loss_fn, optim)
-        epoch_loss += outputs.shape[0] * loss.item()
+        epoch_loss += loss
 
         if (i+1) % args.eval_freq == 0:
             print(epoch_loss)
