@@ -327,7 +327,7 @@ if __name__ == '__main__':
         y = y.to('cuda')
 
         loss = train(model, x, y, loss_fn, optim)
-
+        print(loss)
         if (i+1) % args.eval_freq == 0:
             if args.extensive_eval:
                 train_accuracy_train_mode = eval(model, train_loader, mode=True)
@@ -359,7 +359,6 @@ if __name__ == '__main__':
                 results.store_results(r)
             else:
                 print(r)
-            print(r)
 
             if valid_accuracy_eval_mode > best_acc:
                 best_acc = valid_accuracy_eval_mode
