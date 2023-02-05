@@ -39,15 +39,14 @@ class Adder(torch.utils.data.Dataset):
         to_add_bin_string_2 = format(to_add[1], '04b')
         result_bin_string = format(result, '05b')
 
-        bin_to_add_1 = [int(to_add_bin_string_1[0]), int(to_add_bin_string_1[1]), int(to_add_bin_string_1[2]),
-                        int(to_add_bin_string_1[3])]
-        bin_to_add_2 = [int(to_add_bin_string_2[0]), int(to_add_bin_string_2[1]), int(to_add_bin_string_2[2]),
-                        int(to_add_bin_string_2[3])]
+        bin_to_add_1 = [float(to_add_bin_string_1[0]), float(to_add_bin_string_1[1]), float(to_add_bin_string_1[2]),
+                        float(to_add_bin_string_1[3])]
+        bin_to_add_2 = [float(to_add_bin_string_2[0]), float(to_add_bin_string_2[1]), float(to_add_bin_string_2[2]),
+                        float(to_add_bin_string_2[3])]
         bin_to_add = torch.tensor(bin_to_add_1 + bin_to_add_2)
 
-        bin_result = torch.tensor(np.array(
-            [int(result_bin_string[0]), int(result_bin_string[1]), int(result_bin_string[2]), int(result_bin_string[3]),
-             int(result_bin_string[4])]))
+        bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),
+             float(result_bin_string[3]), float(result_bin_string[4])]))
 
         return bin_to_add, bin_result
 
