@@ -58,7 +58,7 @@ def load_dataset(args):
         test_set = Adder()
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=100, shuffle=True)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=100, shuffle=False)
-    if args.dataset == 'adult':
+    elif args.dataset == 'adult':
         train_set = uci_datasets.AdultDataset('./data-uci', split='train', download=True, with_val=False)
         test_set = uci_datasets.AdultDataset('./data-uci', split='test', with_val=False)
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size, shuffle=True)
