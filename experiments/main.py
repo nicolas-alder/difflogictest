@@ -317,7 +317,7 @@ if __name__ == '__main__':
     ####################################################################################################################
 
     best_acc = 0
-
+    epoch_loss = 0
     for i, (x, y) in tqdm(
             enumerate(load_n(train_loader, args.num_iterations)),
             desc='iteration',
@@ -327,8 +327,11 @@ if __name__ == '__main__':
         y = y.to('cuda')
 
         loss = train(model, x, y, loss_fn, optim)
-        print(loss)
+        epoch_loss += outputs.shape[0] * loss.item()
+
         if (i+1) % args.eval_freq == 0:
+            print(epoch_loss)
+            epoch_loss = 0
             if args.extensive_eval:
                 train_accuracy_train_mode = eval(model, train_loader, mode=True)
                 valid_accuracy_eval_mode = eval(model, validation_loader, mode=False)
