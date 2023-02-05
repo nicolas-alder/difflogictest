@@ -208,7 +208,7 @@ def get_model(args):
 
 def train(model, x, y, loss_fn, optimizer):
     x = model(x)
-    loss = loss_fn(x, y)
+    loss = loss_fn(x.float(), y.float())
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
