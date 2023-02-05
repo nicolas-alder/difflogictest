@@ -137,6 +137,7 @@ def input_dim_of_dataset(dataset):
 
 def num_classes_of_dataset(dataset):
     return {
+        'custom': 5,
         'adult': 2,
         'breast_cancer': 2,
         'monk1': 2,
@@ -251,6 +252,7 @@ if __name__ == '__main__':
     parser.add_argument('-eid', '--experiment_id', type=int, default=None)
 
     parser.add_argument('--dataset', type=str, choices=[
+        'custom',
         'adult', 'breast_cancer',
         'monk1', 'monk2', 'monk3',
         'mnist', 'mnist20x20',
