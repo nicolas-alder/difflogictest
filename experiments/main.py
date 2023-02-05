@@ -223,7 +223,7 @@ def eval(model, loader, mode):
         res = np.mean(
             [
                 #(model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
-                (model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32).item()
+                (model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)
 
                 for x, y in loader
             ]
@@ -240,7 +240,7 @@ def packbits_eval(model, loader):
             [
                 #(model(PackBitsTensor(x.to('cuda').round().bool())).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
                 (model(PackBitsTensor(x.to('cuda').round().bool())) == y.to('cuda')).to(
-                    torch.float32).item()
+                    torch.float32)
 
                 for x, y in loader
             ]
