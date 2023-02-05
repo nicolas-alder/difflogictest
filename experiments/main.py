@@ -45,10 +45,10 @@ class Adder(torch.utils.data.Dataset):
                         float(to_add_bin_string_2[3])]
         bin_to_add = torch.tensor(bin_to_add_1 + bin_to_add_2)
 
-        #bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),float(result_bin_string[3]), float(result_bin_string[4])]))
-        bin_result = torch.zeros(32)
-        bin_result[result.item()]=1.
-        bin_result = bin_result.argmax(-1)
+        bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),float(result_bin_string[3]), float(result_bin_string[4])]))
+        #bin_result = torch.zeros(32)
+        #bin_result[result.item()]=1.
+        #bin_result = bin_result.argmax(-1)
         return bin_to_add, bin_result
 
 def load_dataset(args):
@@ -138,7 +138,7 @@ def input_dim_of_dataset(dataset):
 
 def num_classes_of_dataset(dataset):
     return {
-        'custom': 32,
+        'custom': 5,
         'adult': 2,
         'breast_cancer': 2,
         'monk1': 2,
@@ -199,8 +199,8 @@ def get_model(args):
     if args.experiment_id is not None:
         results.store_results({'model_str': str(model)})
 
-    loss_fn = torch.nn.CrossEntropyLoss()
-
+    #loss_fn = torch.nn.CrossEntropyLoss()
+    loss_fn = torch.nn.BCELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 
     return model, loss_fn, optimizer
@@ -222,7 +222,9 @@ def eval(model, loader, mode):
         model.train(mode=mode)
         res = np.mean(
             [
-                (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+                #(model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+                (model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32).item()
+
                 for x, y in loader
             ]
         )
@@ -236,7 +238,10 @@ def packbits_eval(model, loader):
         model.eval()
         res = np.mean(
             [
-                (model(PackBitsTensor(x.to('cuda').round().bool())).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+                #(model(PackBitsTensor(x.to('cuda').round().bool())).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+                (model(PackBitsTensor(x.to('cuda').round().bool())) == y.to('cuda')).to(
+                    torch.float32).item()
+
                 for x, y in loader
             ]
         )
