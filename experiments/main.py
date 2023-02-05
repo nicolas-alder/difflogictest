@@ -231,8 +231,8 @@ def eval(model, loader, mode):
         model.train(mode=orig_mode)
         print("Example")
         x, y = next(iter(loader))
-        print(model(x.to('cuda').round()))
-        print(y)
+        print(model(x.to('cuda').round())[0])
+        print(y[0])
     return res.item()
 
 
