@@ -198,7 +198,7 @@ def get_model(args):
     if args.experiment_id is not None:
         results.store_results({'model_str': str(model)})
 
-    loss_fn = torch.nn.CrossEntropyLoss()
+    loss_fn = torch.nn.BCELoss()
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 
@@ -219,8 +219,6 @@ def eval(model, loader, mode):
     orig_mode = model.training
     with torch.no_grad():
         model.train(mode=mode)
-        print((model(x.to('cuda').round()).argmax(-1)).size())
-        print(y.size())
         res = np.mean(
             [
                 (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
