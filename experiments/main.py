@@ -333,6 +333,7 @@ if __name__ == '__main__':
         epoch_loss += loss
 
         if (i+1) % args.eval_freq == 0:
+            print("\n")
             print(epoch_loss)
             epoch_loss = 0
             if args.extensive_eval:
