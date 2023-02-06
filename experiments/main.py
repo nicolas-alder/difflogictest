@@ -232,11 +232,11 @@ def eval(model, loader, mode):
         x, y = next(iter(loader))
         print(model(x.to('cuda').round())[0])
         print(y[0])
-        
+
         print(model(x.to('cuda').round()))
         print(y)
-        print(model(x.to('cuda').round()).size)
-        print(y.size)
+        print(model(x.to('cuda').round()).size())
+        print(y.size())
         model.train(mode=orig_mode)
 
     return res.item()
