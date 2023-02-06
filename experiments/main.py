@@ -232,13 +232,11 @@ def eval(model, loader, mode):
         x, y = next(iter(loader))
         print(model(x.to('cuda').round())[0])
         print(y[0])
-        print([
-            # (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
-            ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item()
-
-            for x, y in loader
-        ])
+        
         print(model(x.to('cuda').round()))
+        print(y)
+        print(model(x.to('cuda').round()).size)
+        print(y.size)
         model.train(mode=orig_mode)
 
     return res.item()
