@@ -228,23 +228,24 @@ def eval(model, loader, mode):
                 for x, y in loader
             ]
         )
-        model.train(mode=orig_mode)
         print("Example")
         x, y = next(iter(loader))
         print(model(x.to('cuda').round())[0])
         print(y[0])
         print([
-                #(model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
-                ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 5
-
-                for x, y in loader
-            ])
-        print([
             # (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
-            ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() 
+            ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 5
 
             for x, y in loader
         ])
+        print([
+            # (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+            ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item()
+
+            for x, y in loader
+        ])
+        model.train(mode=orig_mode)
+
     return res.item()
 
 
