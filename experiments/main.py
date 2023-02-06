@@ -233,6 +233,7 @@ def eval(model, loader, mode):
         x, y = next(iter(loader))
         print(model(x.to('cuda').round())[0])
         print(y[0])
+        print(res)
     return res.item()
 
 
