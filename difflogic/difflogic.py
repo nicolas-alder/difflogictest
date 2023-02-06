@@ -52,7 +52,7 @@ class LogicLayer(torch.nn.Module):
         self.connections = connections
         assert self.connections in ['random', 'unique'], self.connections
         self.indices = self.get_connections(self.connections, device)
-
+        print(self.indices)
         if self.implementation == 'cuda':
             """
             Defining additional indices for improving the efficiency of the backward of the CUDA implementation.
