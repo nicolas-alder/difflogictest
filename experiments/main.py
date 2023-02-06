@@ -228,15 +228,7 @@ def eval(model, loader, mode):
                 for x, y in loader
             ]
         )
-        #print("Example")
-        #x, y = next(iter(loader))
-        #print(model(x.to('cuda').round())[0])
-        #print(y[0])
-        print((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32))
-        print(model(x.to('cuda').round()))
-        print(y)
-        print(model(x.to('cuda').round()).size())
-        print(y.size())
+
         model.train(mode=orig_mode)
 
     return res.item()
