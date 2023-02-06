@@ -239,6 +239,12 @@ def eval(model, loader, mode):
 
                 for x, y in loader
             ])
+        print([
+            # (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+            ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() 
+
+            for x, y in loader
+        ])
     return res.item()
 
 
