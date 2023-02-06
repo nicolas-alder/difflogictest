@@ -223,7 +223,7 @@ def eval(model, loader, mode):
         res = np.mean(
             [
                 #(model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
-                ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 5
+                ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 500
 
                 for x, y in loader
             ]
