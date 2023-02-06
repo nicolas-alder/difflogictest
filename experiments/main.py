@@ -14,6 +14,9 @@ import mnist_dataset
 import uci_datasets
 from difflogic import LogicLayer, GroupSum, PackBitsTensor, CompiledLogicNet
 
+from torchsummary import summary
+
+
 torch.set_num_threads(1)
 
 BITS_TO_TORCH_FLOATING_POINT_TYPE = {
@@ -284,8 +287,10 @@ def eval(model, loader, mode):
                     for x, y in loader
                 ])
 
-
-
+        print(model)
+        print("Model's state_dict:")
+        for param_tensor in model.state_dict():
+            print(param_tensor, "\t", model.state_dict()[param_tensor].size())
         model.train(mode=orig_mode)
 
     return res.item()
