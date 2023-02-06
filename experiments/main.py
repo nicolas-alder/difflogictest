@@ -232,7 +232,7 @@ def eval(model, loader, mode):
         #x, y = next(iter(loader))
         #print(model(x.to('cuda').round())[0])
         #print(y[0])
-        print(res)
+        print((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32))
         print(model(x.to('cuda').round()))
         print(y)
         print(model(x.to('cuda').round()).size())
