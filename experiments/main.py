@@ -290,7 +290,7 @@ def eval(model, loader, mode):
         print(model)
         for name, param in model.named_parameters():
             print(name)
-            print(param)
+            print(param.argmax(-1))
         model.train(mode=orig_mode)
 
     return res.item()
