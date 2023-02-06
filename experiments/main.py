@@ -81,7 +81,7 @@ class VectorMultiplication(torch.utils.data.Dataset):
 
         bin_to_mul = torch.tensor(bin_to_mul_1 + bin_to_mul_2 + bin_to_mul_3 + bin_to_mul_4)
 
-        bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),float(result_bin_string[3]), float(result_bin_string[4])]))
+        bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),float(result_bin_string[3]), float(result_bin_string[4]),float(result_bin_string[5]),float(result_bin_string[6]),float(result_bin_string[7]),float(result_bin_string[8]),float(result_bin_string[9])]))
 
         return bin_to_mul, bin_result
 def load_dataset(args):
@@ -260,14 +260,31 @@ def eval(model, loader, mode):
     orig_mode = model.training
     with torch.no_grad():
         model.train(mode=mode)
-        res = np.mean(
+        if args.dataset == 'custom':
+            res = np.mean(
             [
                 #(model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
                 ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 500
 
                 for x, y in loader
-            ]
-        )
+            ])
+        elif args.dataset == 'vectormul':
+            res = np.mean(
+                [
+                    # (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+                    ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 900
+
+                    for x, y in loader
+                ])
+        else:
+            res = np.mean(
+                [
+                    (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+
+                    for x, y in loader
+                ])
+
+
 
         model.train(mode=orig_mode)
 
