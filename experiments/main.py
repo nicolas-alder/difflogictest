@@ -81,7 +81,7 @@ class VectorMultiplication(torch.utils.data.Dataset):
 
         bin_to_mul = torch.tensor(bin_to_mul_1 + bin_to_mul_2 + bin_to_mul_3 + bin_to_mul_4)
 
-        bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),float(result_bin_string[3]), float(result_bin_string[4]),float(result_bin_string[5]),float(result_bin_string[6]),float(result_bin_string[7]),float(result_bin_string[8]),float(result_bin_string[9])]))
+        bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),float(result_bin_string[3]), float(result_bin_string[4]),float(result_bin_string[5]),float(result_bin_string[6]),float(result_bin_string[7]),float(result_bin_string[8])]))
 
         return bin_to_mul, bin_result
 def load_dataset(args):
