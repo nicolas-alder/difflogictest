@@ -51,11 +51,49 @@ class Adder(torch.utils.data.Dataset):
         #bin_result = bin_result.argmax(-1)
         return bin_to_add, bin_result
 
+class VectorMultiplication(torch.utils.data.Dataset):
+    def __init__(self):
+        return
+
+    def __len__(self):
+        return 10000
+
+    def __getitem__(self, idx):
+        # input is 4 bit (0 to 15) # output is 9 bit (0 to 450 // [0,2*15*15])
+        to_mul = torch.tensor(np.random.randint(16, size=4))
+        result = torch.tensor(to_mul[0]*to_mul[2]+to_mul[1]*to_mul[3])
+
+        to_mul_bin_string_1 = format(to_mul[0], '04b')
+        to_mul_bin_string_2 = format(to_mul[1], '04b')
+        to_mul_bin_string_3 = format(to_mul[2], '04b')
+        to_mul_bin_string_4 = format(to_mul[3], '04b')
+
+        result_bin_string = format(result, '09b')
+
+        bin_to_mul_1 = [float(to_mul_bin_string_1[0]), float(to_mul_bin_string_1[1]), float(to_mul_bin_string_1[2]),
+                        float(to_mul_bin_string_1[3])]
+        bin_to_mul_2 = [float(to_mul_bin_string_2[0]), float(to_mul_bin_string_2[1]), float(to_mul_bin_string_2[2]),
+                        float(to_mul_bin_string_2[3])]
+        bin_to_mul_3 = [float(to_mul_bin_string_3[0]), float(to_mul_bin_string_3[1]), float(to_mul_bin_string_3[2]),
+                        float(to_mul_bin_string_3[3])]
+        bin_to_mul_4 = [float(to_mul_bin_string_4[0]), float(to_mul_bin_string_4[1]), float(to_mul_bin_string_4[2]),
+                        float(to_mul_bin_string_4[3])]
+
+        bin_to_mul = torch.tensor(bin_to_mul_1 + bin_to_mul_2 + bin_to_mul_3 + bin_to_mul_4)
+
+        bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),float(result_bin_string[3]), float(result_bin_string[4])]))
+
+        return bin_to_mul, bin_result
 def load_dataset(args):
     validation_loader = None
     if args.dataset == 'custom':
         train_set = Adder()
         test_set = Adder()
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=100, shuffle=True)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=int(1e6), shuffle=False)
+    elif args.dataset == 'vectormul':
+        train_set = VectorMultiplication()
+        test_set = VectorMultiplication()
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=100, shuffle=True)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=int(1e6), shuffle=False)
     elif args.dataset == 'adult':
@@ -123,6 +161,7 @@ def load_n(loader, n):
 
 def input_dim_of_dataset(dataset):
     return {
+        'vectormul':16,
         'custom': 8,
         'adult': 116,
         'breast_cancer': 51,
@@ -138,6 +177,7 @@ def input_dim_of_dataset(dataset):
 
 def num_classes_of_dataset(dataset):
     return {
+        'vectormul': 9,
         'custom': 5,
         'adult': 2,
         'breast_cancer': 2,
@@ -259,6 +299,7 @@ if __name__ == '__main__':
     parser.add_argument('-eid', '--experiment_id', type=int, default=None)
 
     parser.add_argument('--dataset', type=str, choices=[
+        'vectormul',
         'custom',
         'adult', 'breast_cancer',
         'monk1', 'monk2', 'monk3',
