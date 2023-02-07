@@ -25,7 +25,13 @@ BITS_TO_TORCH_FLOATING_POINT_TYPE = {
     64: torch.float64
 }
 
+class CustomLoss(nn.Module):
+    def __init__(self):
+        super(CustomLoss, self).__init__()
 
+    def forward(self, output, target):
+        loss = weighted_mse_loss(output, target)
+        return loss
 class Adder(torch.utils.data.Dataset):
     def __init__(self):
         return
@@ -490,10 +496,3 @@ def weighted_mse_loss(input, target):
     weight = np.power(2, range(len(target)))
     return (weight * (input - target) ** 2).mean()
 
-class CustomLoss(nn.Module):
-    def __init__(self):
-        super(CustomLoss, self).__init__()
-
-    def forward(self, output, target):
-        loss = weighted_mse_loss(output, target)
-        return loss
