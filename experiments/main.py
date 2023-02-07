@@ -25,7 +25,7 @@ BITS_TO_TORCH_FLOATING_POINT_TYPE = {
     64: torch.float64
 }
 
-class CustomLoss(nn.Module):
+class CustomLoss(torch.nn.Module):
     def __init__(self):
         super(CustomLoss, self).__init__()
 
