@@ -26,9 +26,6 @@ BITS_TO_TORCH_FLOATING_POINT_TYPE = {
 }
 def weighted_mse_loss(input, target):
     weight = torch.tensor(np.power(2, list(range(5))*100).reshape(-1,5)).to('cuda')
-    print(input.size())
-    print(target.size())
-    print(weight.size())
     return (weight * (input - target) ** 2).mean()
 
 
