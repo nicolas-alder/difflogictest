@@ -25,7 +25,10 @@ BITS_TO_TORCH_FLOATING_POINT_TYPE = {
     64: torch.float64
 }
 def weighted_mse_loss(input, target):
+    print(input.size())
+    print(target.size())
     weight = torch.tensor(np.power(2, range(len(target))))
+    print(weight.size())
     return (weight * (input - target) ** 2).mean()
 
 
