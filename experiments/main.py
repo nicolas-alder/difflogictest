@@ -24,6 +24,10 @@ BITS_TO_TORCH_FLOATING_POINT_TYPE = {
     32: torch.float32,
     64: torch.float64
 }
+def weighted_mse_loss(input, target):
+    weight = np.power(2, range(len(target)))
+    return (weight * (input - target) ** 2).mean()
+
 
 class CustomLoss(torch.nn.Module):
     def __init__(self):
@@ -491,8 +495,4 @@ if __name__ == '__main__':
 
                 acc3 = correct / total
                 print('COMPILED MODEL', num_bits, acc3)
-
-def weighted_mse_loss(input, target):
-    weight = np.power(2, range(len(target)))
-    return (weight * (input - target) ** 2).mean()
 
