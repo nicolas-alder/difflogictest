@@ -243,7 +243,8 @@ def get_model(args):
         results.store_results({'model_str': str(model)})
 
     #loss_fn = torch.nn.CrossEntropyLoss()
-    loss_fn = torch.nn.MSELoss()
+    #loss_fn = torch.nn.MSELoss()
+    loss_fn = CustomLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 
     return model, loss_fn, optimizer
@@ -485,3 +486,14 @@ if __name__ == '__main__':
                 acc3 = correct / total
                 print('COMPILED MODEL', num_bits, acc3)
 
+def weighted_mse_loss(input, target):
+    weight = np.power(2, range(len(target)))
+    return (weight * (input - target) ** 2).mean()
+
+class CustomLoss(nn.Module):
+    def __init__(self):
+        super(CustomLoss, self).__init__()
+
+    def forward(self, output, target):
+        loss = weighted_mse_loss(output, target)
+        return loss
