@@ -275,8 +275,22 @@ def eval(model, loader, mode):
     with torch.no_grad():
         model.train(mode=mode)
         if args.dataset == 'custom':
-            #print(((torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)) * model(x.to('cuda')).round().to(torch.float32).cpu()) - (y.cpu() * torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)).to(torch.float32))).mean(dim=0).numpy())
 
+            print(torch.tensor([
+                #(model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+                #((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 500
+                ((torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)) * model(x.to('cuda')).round().to(torch.float32).cpu()) - (y.cpu() * torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)).to(torch.float32))).mean(dim=0).numpy()
+            for x, y in loader
+            ]))
+            print(torch.tensor([
+                # (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+                # ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 500
+                ((torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)) * model(x.to('cuda')).round().to(
+                    torch.float32).cpu()) - (
+                             y.cpu() * torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)).to(
+                         torch.float32))).mean(dim=0).numpy()
+                for x, y in loader
+            ]).size())
             res = torch.tensor([
                 #(model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
                 #((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 500
