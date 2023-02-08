@@ -289,22 +289,22 @@ def eval(model, loader, mode):
                     ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 900
 
                     for x, y in loader
-                ])
+                ]).item()
         else:
             res = np.mean(
                 [
                     (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
 
                     for x, y in loader
-                ])
+                ]).item()
 
-        print(model)
-        for name, param in model.named_parameters():
-            print(name)
-            print(param.argmax(-1))
+        #print(model)
+        #for name, param in model.named_parameters():
+         #   print(name)
+          #  print(param.argmax(-1))
         model.train(mode=orig_mode)
 
-    return res.item()
+    return res
 
 
 def packbits_eval(model, loader):
