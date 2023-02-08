@@ -275,8 +275,7 @@ def eval(model, loader, mode):
     with torch.no_grad():
         model.train(mode=mode)
         if args.dataset == 'custom':
-            print(model(x.to('cuda')).round().to(torch.float32).size())
-            print(y.size())
+            print(((torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)) * model(x.to('cuda')).round().to(torch.float32).cpu()) - (y * torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)).to(torch.float32))).mean(dim=0).numpy())
 
             res = torch.tensor([
                 #(model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
