@@ -283,7 +283,7 @@ def eval(model, loader, mode):
                 #((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 500
                 ((torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)) * model(x.to('cuda')).round().to(torch.float32).cpu()) - (y * torch.tensor(np.power(2, list(range(5)) * 100).reshape(-1, 5)).to(torch.float32))).mean(dim=0).numpy()
             for x, y in loader
-            ]).reshape(-1,5).mean(dim=0)
+            ]).mean(dim=0)
         elif args.dataset == 'vectormul':
             res = np.mean(
                 [
