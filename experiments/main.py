@@ -275,7 +275,8 @@ def eval(model, loader, mode):
     with torch.no_grad():
         model.train(mode=mode)
         if args.dataset == 'custom':
-            values = list(range(5)).reverse()
+            values = list(range(5))
+            values.reverse()
 
             res = torch.tensor([
                 #(model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
