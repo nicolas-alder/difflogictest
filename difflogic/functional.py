@@ -27,7 +27,6 @@ def bin_op(a, b, i):
     assert a[0].shape == b[0].shape, (a[0].shape, b[0].shape)
     if a.shape[0] > 1:
         assert a[1].shape == b[1].shape, (a[1].shape, b[1].shape)
-
     if i == 0:
         return torch.zeros_like(a)
     elif i == 1:
@@ -60,12 +59,18 @@ def bin_op(a, b, i):
         return 1 - a * b
     elif i == 15:
         return torch.ones_like(a)
+    elif i ==16:
+        r1 = a*b
+        r2 = a + b - 2 * a * b
+        return r1, r2
 
 
-def bin_op_s(a, b, i_s):
+
+
+def bin_op_s(a, b, c, d, i_s):
     r = torch.zeros_like(a)
     for i in range(16):
-        u = bin_op(a, b, i)
+        u = bin_op(a, b, c, d, i)
         r = r + i_s[..., i] * u
     return r
 

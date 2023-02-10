@@ -207,7 +207,7 @@ def num_classes_of_dataset(dataset):
 
 
 def get_model(args):
-    llkw = dict(grad_factor=args.grad_factor, connections=args.connections)
+    llkw = dict(grad_factor=args.grad_factor, connections=args.connections, multi_input = args.multi_input)
 
     in_dim = input_dim_of_dataset(args.dataset)
     class_count = num_classes_of_dataset(args.dataset)
@@ -371,6 +371,8 @@ if __name__ == '__main__':
     parser.add_argument('--num_layers', '-l', type=int)
 
     parser.add_argument('--grad-factor', type=float, default=1.)
+
+    parser.add_argument('--multi_input', '-mi', type=int, default=2, help='multiplier for input connections per basis function')
 
     args = parser.parse_args()
 

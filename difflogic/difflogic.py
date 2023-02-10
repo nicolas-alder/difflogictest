@@ -50,6 +50,7 @@ class LogicLayer(torch.nn.Module):
         assert self.implementation in ['cuda', 'python'], self.implementation
 
         self.connections = connections
+        self.multi_input = multi_input
         assert self.connections in ['random', 'unique'], self.connections
         self.indices = self.get_connections(self.connections, device)
         if self.implementation == 'cuda':
@@ -151,17 +152,18 @@ class LogicLayer(torch.nn.Module):
         return '{}, {}, {}'.format(self.in_dim, self.out_dim, 'train' if self.training else 'eval')
 
     def get_connections(self, connections, device='cuda'):
-        assert self.out_dim * 2 >= self.in_dim, 'The number of neurons ({}) must not be smaller than half of the ' \
+        assert self.out_dim * 5 >= self.in_dim, 'The number of neurons ({}) must not be smaller than half of the ' \
                                                 'number of inputs ({}) because otherwise not all inputs could be ' \
                                                 'used or considered.'.format(self.out_dim, self.in_dim)
         if connections == 'random':
-            c = torch.randperm(2 * self.out_dim) % self.in_dim
+            c = torch.randperm(8 * self.out_dim * self.multi_input) % self.in_dim
             c = torch.randperm(self.in_dim)[c]
-            c = c.reshape(2, self.out_dim)
+            c = c.reshape(8, self.out_dim, self.multi_input)
             a, b = c[0], c[1]
             a, b = a.to(torch.int64), b.to(torch.int64)
             a, b = a.to(device), b.to(device)
             return a, b
+
         elif connections == 'unique':
             return get_unique_connections(self.in_dim, self.out_dim, device)
         else:
