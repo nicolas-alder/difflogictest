@@ -294,8 +294,8 @@ def get_model(args):
         results.store_results({'model_str': str(model)})
 
     #loss_fn = torch.nn.CrossEntropyLoss()
-    #loss_fn = torch.nn.MSELoss()
-    loss_fn = CustomLoss()
+    loss_fn = torch.nn.MSELoss()
+    #loss_fn = CustomLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 
     return model, loss_fn, optimizer
