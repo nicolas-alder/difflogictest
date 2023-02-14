@@ -99,6 +99,35 @@ class VectorMultiplication(torch.utils.data.Dataset):
         bin_result = torch.tensor(np.array([float(result_bin_string[0]), float(result_bin_string[1]), float(result_bin_string[2]),float(result_bin_string[3]), float(result_bin_string[4]),float(result_bin_string[5]),float(result_bin_string[6]),float(result_bin_string[7]),float(result_bin_string[8])]))
 
         return bin_to_mul, bin_result
+
+def tensor2ieeeString(result):
+  return "".join([str(int(bit)) for bit in result.numpy().tolist()])
+def binaryToFloat(value):
+    hx = hex(int(value, 2))
+    return struct.unpack("d", struct.pack("q", int(hx, 16)))[0]
+def floatToBinary64(value):
+    val = struct.unpack('Q', struct.pack('d', value))[0]
+    return getBin(val)
+getBin = lambda x: x > 0 and str(bin(x))[2:] or "-" + str(bin(x))[3:]
+
+class Determinant(torch.utils.data.Dataset):
+    def __init__(self):
+        return
+
+    def __len__(self):
+        return 10000
+
+    def __getitem__(self, idx):
+        # input is 10*10=100 4 bit values with value range (0 to 15) # output is 64bit float in IEE 754 format
+        n = 10
+        matrix = torch.tensor(np.random.randint(16, size=n * n)).reshape(n, n)
+        result = torch.linalg.det(matrix.float())
+        matrix_bin = [list(format(element.item(), '04b')) for element in matrix.flatten()]
+        matrix_bin_input = torch.tensor([float(num) for sublist in matrix_bin for num in sublist])
+        result_bin_input = torch.tensor([float(bit) for bit in list(floatToBinary64(result))])
+
+        return matrix_bin_input, result_bin_input
+
 def load_dataset(args):
     validation_loader = None
     if args.dataset == 'custom':
@@ -110,6 +139,11 @@ def load_dataset(args):
         train_set = VectorMultiplication()
         test_set = VectorMultiplication()
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=100, shuffle=True)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=int(1e6), shuffle=False)
+    elif args.dataset == 'determinant':
+        train_set = Determinant()
+        test_set = Determinant()
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size, shuffle=True)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=int(1e6), shuffle=False)
     elif args.dataset == 'adult':
         train_set = uci_datasets.AdultDataset('./data-uci', split='train', download=True, with_val=False)
@@ -176,7 +210,7 @@ def load_n(loader, n):
 
 def input_dim_of_dataset(dataset):
     return {
-        'vectormul':16,
+        'vectormul':400,
         'custom': 8,
         'adult': 116,
         'breast_cancer': 51,
@@ -192,7 +226,7 @@ def input_dim_of_dataset(dataset):
 
 def num_classes_of_dataset(dataset):
     return {
-        'vectormul': 9,
+        'vectormul':64,
         'custom': 5,
         'adult': 2,
         'breast_cancer': 2,
@@ -296,6 +330,13 @@ def eval(model, loader, mode):
 
                     for x, y in loader
                 ]).item()
+        elif args.dataset == 'determinant':
+            res = torch.tensor([
+                # (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
+                # ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 500
+                (binaryToFloat(model(x.to('cuda')).round()).cpu()) - binaryToFloat(y.cpu())
+                for x, y in loader
+            ]).mean(dim=0)
         else:
             res = np.mean(
                 [
@@ -338,6 +379,7 @@ if __name__ == '__main__':
     parser.add_argument('-eid', '--experiment_id', type=int, default=None)
 
     parser.add_argument('--dataset', type=str, choices=[
+        'determinant',
         'vectormul',
         'custom',
         'adult', 'breast_cancer',
