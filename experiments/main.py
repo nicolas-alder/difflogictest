@@ -210,7 +210,8 @@ def load_n(loader, n):
 
 def input_dim_of_dataset(dataset):
     return {
-        'vectormul':400,
+        'determinant':400,
+        'vectormul':16,
         'custom': 8,
         'adult': 116,
         'breast_cancer': 51,
@@ -226,7 +227,8 @@ def input_dim_of_dataset(dataset):
 
 def num_classes_of_dataset(dataset):
     return {
-        'vectormul':64,
+        'determinant': 64,
+        'vectormul':9,
         'custom': 5,
         'adult': 2,
         'breast_cancer': 2,
