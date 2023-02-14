@@ -124,7 +124,10 @@ class Determinant(torch.utils.data.Dataset):
         result = torch.linalg.det(matrix.float())
         matrix_bin = [list(format(element.item(), '04b')) for element in matrix.flatten()]
         matrix_bin_input = torch.tensor([float(num) for sublist in matrix_bin for num in sublist])
-        result_bin_input = torch.tensor([float(bit) for bit in list(floatToBinary64(result))])
+        if result < 0:
+            result_bin_input = torch.tensor([float(bit) for bit in list(floatToBinary64(result))])
+        else:
+            result_bin_input = torch.tensor([0] + [float(bit) for bit in list(floatToBinary64(result))])
 
         return matrix_bin_input, result_bin_input
 
