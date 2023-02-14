@@ -106,7 +106,7 @@ def binaryToFloat(value):
     try:
         hx = hex(int(value, 2))
     except:
-        hx = 0
+        hx = hex(int("0",2))
     return struct.unpack("d", struct.pack("q", int(hx, 16)))[0]
 def floatToBinary64(value):
     val = struct.unpack('Q', struct.pack('d', value))[0]
