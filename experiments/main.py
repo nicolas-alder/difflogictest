@@ -15,7 +15,7 @@ import uci_datasets
 from difflogic import LogicLayer, GroupSum, PackBitsTensor, CompiledLogicNet
 
 from torchsummary import summary
-
+import struct
 
 torch.set_num_threads(1)
 
