@@ -103,7 +103,10 @@ class VectorMultiplication(torch.utils.data.Dataset):
 def tensor2ieeeString(result):
   return "".join([str(int(bit)) for bit in result.numpy().tolist()])
 def binaryToFloat(value):
-    hx = hex(int(value, 2))
+    try:
+        hx = hex(int(value, 2))
+    except:
+        hx = 0
     return struct.unpack("d", struct.pack("q", int(hx, 16)))[0]
 def floatToBinary64(value):
     val = struct.unpack('Q', struct.pack('d', value))[0]
