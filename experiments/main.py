@@ -105,9 +105,10 @@ def tensor2ieeeString(result):
 def binaryToFloat(value):
     try:
         hx = hex(int(value, 2))
+        return struct.unpack("d", struct.pack("q", int(hx, 16)))[0]
     except:
         hx = hex(int("0",2))
-    return struct.unpack("d", struct.pack("q", int(hx, 16)))[0]
+        return struct.unpack("d", struct.pack("q", int(hx, 16)))[0]
 def floatToBinary64(value):
     val = struct.unpack('Q', struct.pack('d', value))[0]
     return getBin(val)
