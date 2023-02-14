@@ -339,7 +339,7 @@ def eval(model, loader, mode):
             res = torch.tensor([
                 # (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
                 # ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 500
-                (binaryToFloat(model(x.to('cuda')).round()).cpu()) - binaryToFloat(y.cpu())
+                (binaryToFloat(str(model(x.to('cuda')).round()).cpu().item())) - binaryToFloat(str(y.cpu().item()))
                 for x, y in loader
             ]).mean(dim=0)
         else:
