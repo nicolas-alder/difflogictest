@@ -125,10 +125,10 @@ class Determinant(torch.utils.data.Dataset):
 
         self.x_train = torch.tensor(features, dtype=torch.float32)
         self.y_train = torch.tensor(targets, dtype=torch.float32)
-        def __len__(self):
-            return len(self.y_train)
-        def __getitem__(self, idx):
-            return self.x_train[idx], self.y_train[idx]
+    def __len__(self):
+        return len(self.y_train)
+    def __getitem__(self, idx):
+        return self.x_train[idx], self.y_train[idx]
 
 class DeterminantDynamic(torch.utils.data.Dataset):
     def __init__(self):
