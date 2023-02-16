@@ -16,6 +16,7 @@ from difflogic import LogicLayer, GroupSum, PackBitsTensor, CompiledLogicNet
 
 from torchsummary import summary
 import struct
+import pandas as pd
 
 torch.set_num_threads(1)
 
@@ -115,6 +116,21 @@ def floatToBinary64(value):
 getBin = lambda x: x > 0 and str(bin(x))[2:] or "-" + str(bin(x))[3:]
 
 class Determinant(torch.utils.data.Dataset):
+    def __init__(self, path):
+        data = pd.read_csv(path, sep=",")
+        features = data.iloc[:, 0].values
+        features = [[float(el) for el in list(feature)] for feature in features]
+        targets = data.iloc[:, 1].values
+        targets = [[float(el) for el in list(target)] for target in targets]
+
+        self.x_train = torch.tensor(features, dtype=torch.float32)
+        self.y_train = torch.tensor(targets, dtype=torch.float32)
+def __len__(self):
+    return len(self.y_train)
+def __getitem__(self, idx):
+    return self.x_train[idx], self.y_train[idx]
+
+class DeterminantDynamic(torch.utils.data.Dataset):
     def __init__(self):
         return
 
@@ -148,8 +164,8 @@ def load_dataset(args):
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=100, shuffle=True)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=int(1e6), shuffle=False)
     elif args.dataset == 'determinant':
-        train_set = Determinant()
-        test_set = Determinant()
+        train_set = Determinant(path=args.path)
+        test_set = Determinant(path=args.path)
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size, shuffle=True)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=int(1e6), shuffle=False)
     elif args.dataset == 'adult':
@@ -386,6 +402,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train logic gate network on the various datasets.')
 
     parser.add_argument('-eid', '--experiment_id', type=int, default=None)
+    parser.add_argument('--path', type=str, default=None)
 
     parser.add_argument('--dataset', type=str, choices=[
         'determinant',
@@ -552,4 +569,3 @@ if __name__ == '__main__':
 
                 acc3 = correct / total
                 print('COMPILED MODEL', num_bits, acc3)
-
