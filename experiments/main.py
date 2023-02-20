@@ -108,8 +108,8 @@ def binaryToFloat(value):
         hx = hex(int(value, 2))
         return struct.unpack("d", struct.pack("q", int(hx, 16)))[0]
     except:
-        hx = hex(int("0",2))
-        return struct.unpack("d", struct.pack("q", int(hx, 16)))[0]
+        return float(random.randint(200, 400))
+
 def floatToBinary64(value):
     val = struct.unpack('Q', struct.pack('d', value))[0]
     return getBin(val)
@@ -117,7 +117,7 @@ getBin = lambda x: x > 0 and str(bin(x))[2:] or "-" + str(bin(x))[3:]
 
 class Determinant(torch.utils.data.Dataset):
     def __init__(self, path):
-        data = pd.read_csv(path, sep=",")
+        data = pd.read_csv(path, sep=",", nrows=1000000)
         features = data.iloc[:, 0].values
         features = [[float(el) for el in list(feature)] for feature in features]
         targets = data.iloc[:, 1].values
@@ -359,7 +359,7 @@ def eval(model, loader, mode):
             res = torch.tensor([
                 # (model(x.to('cuda').round()).argmax(-1) == y.to('cuda')).to(torch.float32).mean().item()
                 # ((model(x.to('cuda').round()) == y.to('cuda')).to(torch.float32)).sum().item() / 500
-                (binaryToFloat("".join([str(int(x)) for x in list(model(x.to('cuda')).round().cpu().flatten().numpy())]))) - binaryToFloat("".join([str(int(x)) for x in list(y.cpu().flatten().numpy())]))#binaryToFloat("".join([str(int(x)) for x in list(model(x.to('cuda')).round().cpu().flatten().numpy())]))#
+                abs(binaryToFloat("".join([str(int(x)) for x in list(model(x.to('cuda')).round().cpu().flatten().numpy())]))) - binaryToFloat("".join([str(int(x)) for x in list(y.cpu().flatten().numpy())]))#binaryToFloat("".join([str(int(x)) for x in list(model(x.to('cuda')).round().cpu().flatten().numpy())]))#
                 for x, y in loader
             ]).mean(dim=0)
         else:
