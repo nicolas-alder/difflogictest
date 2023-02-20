@@ -116,8 +116,11 @@ def floatToBinary64(value):
 getBin = lambda x: x > 0 and str(bin(x))[2:] or "-" + str(bin(x))[3:]
 
 class Determinant(torch.utils.data.Dataset):
-    def __init__(self, path):
-        data = pd.read_csv(path, sep=",", nrows=1000000)
+    def __init__(self, path, set="train"):
+        if set=="train":
+            data = pd.read_csv(path, sep=",", nrows=1000000)
+        else:
+            data = pd.read_csv(path, sep=",", skiprows=1000000, nrows=2000000)
         features = data.iloc[:, 0].values
         features = [[float(el) for el in list(feature)] for feature in features]
         targets = data.iloc[:, 1].values
