@@ -168,7 +168,7 @@ def load_dataset(args):
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=int(1e6), shuffle=False)
     elif args.dataset == 'determinant':
         train_set = Determinant(path=args.path, set="train")
-        test_set = Determinant(path=args.pathm, set="test")
+        test_set = Determinant(path=args.path, set="test")
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size, shuffle=True)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=int(1e6), shuffle=False)
     elif args.dataset == 'adult':
