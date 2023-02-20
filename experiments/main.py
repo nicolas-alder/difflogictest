@@ -120,7 +120,7 @@ class Determinant(torch.utils.data.Dataset):
         if set=="train":
             data = pd.read_csv("/content/drive/MyDrive/dataset.csv", sep=",", nrows=1000000)
         else:
-            data = pd.read_csv("/content/drive/MyDrive/dataset.csv2", sep=",", skiprows=range(0,1000000), nrows=2000000)
+            data = pd.read_csv("/content/drive/MyDrive/dataset.csv2", sep=",", nrows=100000)
         features = data.iloc[:, 0].values
         features = [[float(el) for el in list(feature)] for feature in features]
         targets = data.iloc[:, 1].values
